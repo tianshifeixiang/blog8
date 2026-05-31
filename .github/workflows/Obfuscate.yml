@@ -39,10 +39,10 @@ jobs:
           RESPONSE=$(curl -s "$API_URL")
           LATEST_RELEASE=$(echo "$RESPONSE" | jq -r '.[0]')
           TAG_NAME=$(echo "$LATEST_RELEASE" | jq -r '.tag_name')
-          DOWNLOAD_URL=$(echo "$LATEST_RELEASE" | jq -r '.assets[] | select(.name == "worker.zip") | .browser_download_url')
+          DOWNLOAD_URL=$(echo "$LATEST_RELEASE" | jq -r '.assets[] | select(.name == "worker.js") | .browser_download_url')
 
           if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" == "null" ]; then
-            echo -e "\033[31m未找到 worker.zip，退出！\033[0m"
+            echo -e "\033[31m未找到 worker.js，退出！\033[0m"
             exit 1
           fi
 
@@ -67,13 +67,9 @@ jobs:
         run: |
           echo -e "\033[34m[清理旧文件]\033[0m"
           rm -rf ./*
-          echo -e "\033[34m[下载最新 worker.zip]\033[0m"
-          wget -O worker.zip "$DOWNLOAD_URL"
-          echo -e "\033[34m[解压 worker.zip]\033[0m"
-          unzip worker.zip
-          echo -e "\033[34m[删除 worker.zip]\033[0m"
-          rm worker.zip
-          echo -e "\033[34m[记录新版本号]\033[0m"
+          echo -e "\033[34m[下载最新 worker.js]\033[0m"
+          wget -O worker.js "$DOWNLOAD_URL"
+          echo -e "\033[34m[记录数版本号]\033[0m"
           echo "$TAG_NAME" > version.txt
 
       - name: 提交更改
